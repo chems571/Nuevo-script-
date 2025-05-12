@@ -1,0 +1,29 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Crear la animación de flotación
+local floatAnim = Instance.new("Animation")
+floatAnim.AnimationId = "rbxassetid://1234567890"  -- Aquí puedes poner el ID de la animación de flotación que desees
+
+-- Cargar la animación de flotación
+local animTrack = humanoid:LoadAnimation(floatAnim)
+
+-- Configurar las propiedades de la animación
+animTrack.Priority = Enum.AnimationPriority.Idle
+animTrack.Looped = true
+
+-- Reproducir la animación de flotación
+animTrack:Play()
+
+-- Mantener al personaje flotando sin perder movilidad
+game:GetService("RunService").Heartbeat:Connect(function()
+    -- Levantar al personaje un poco para simular que está flotando
+    humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0.2, 0)
+
+    -- Asegurar que el personaje puede moverse normalmente
+    if humanoid.MoveDirection.Magnitude > 0 then
+        humanoid:Move(Vector3.new(humanoid.MoveDirection.X, humanoid.MoveDirection.Y, humanoid.MoveDirection.Z))
+    end
+end)
